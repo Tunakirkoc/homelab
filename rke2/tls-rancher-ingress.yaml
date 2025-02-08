@@ -1,0 +1,13 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: tls-rancher-ingress
+  namespace: cattle-system
+spec:
+  secretName: tls-rancher-ingress
+  commonName: rancher.kirkoc.net
+  dnsNames:
+    - rancher.kirkoc.net
+  issuerRef:
+    name: letsencrypt-prod
+    kind: ClusterIssuer
