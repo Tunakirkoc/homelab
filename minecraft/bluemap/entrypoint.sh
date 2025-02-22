@@ -5,4 +5,4 @@ if [ -n "$BLUEMAP_DB_URL" ]; then
     sed -i "s#connection-url: \"\"#connection-url: \"$escaped_url\"#" /app/config/storages/sql.conf
 fi
 
-exec java -jar cli.jar -w
+exec java -jar cli.jar -r -w
