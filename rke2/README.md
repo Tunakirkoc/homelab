@@ -118,6 +118,15 @@ nano ~/.kube/config
 kubectl get nodes
 ```
 
+## Install MetalLB for IP Address Management
+
+```bash
+helm repo add metallb https://metallb.github.io/metallb
+helm repo update
+
+helm install metallb metallb/metallb
+```
+
 ## Install the Rancher UI using DNS-01 Challenge
 
 ```bash
