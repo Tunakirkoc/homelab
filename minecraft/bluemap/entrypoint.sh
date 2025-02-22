@@ -1,5 +1,8 @@
 #!/bin/sh
 
-sed -i "s|connection-url: \"\"|connection-url: \"$BLUEMAP_DB_URL\"|g" /app/config/storages/sql.conf
+if [ -n "$BLUEMAP_DB_URL" ]; then
+    escaped_url=$(printf '%s\n' "$BLUEMAP_DB_URL" | sed 's/[\/&]/\\&/g')
+    sed -i "s#connection-url: \"\"#connection-url: \"$escaped_url\"#" /app/config/storages/sql.conf
+fi
 
 exec java -jar cli.jar -w
