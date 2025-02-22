@@ -18,36 +18,26 @@ This will install the CloudNativePG operator in the `cnpg-system` namespace.
 
 ## Deploying BlueMap
 
-Create a new namespace for the BlueMap deployment:
+Deploy PostgreSQL and BlueMap using the provided Kubernetes manifests:
 
 ```bash
-kubectl create namespace minecraft
+# Deploy PostgreSQL cluster
+kubectl apply -f postgresql.yaml
+
+# Wait for PostgreSQL to be ready
+kubectl wait --namespace minecraft --for=condition=Ready cluster/bluemap-cluster --timeout=300s
+
+# Deploy BlueMap
+kubectl apply -f bluemap.yaml
+
+# Wait for BlueMap to be ready
+kubectl wait --namespace minecraft --for=condition=Ready pod -l app=bluemap --timeout=300s
 ```
 
-To deploy BlueMap, apply the `deploy.yaml` file:
-
-```bash
-kubectl apply -f deploy.yaml
-```
-
-This command will create a PostgreSQL cluster and a will deply BlueMap in the `minecraft` namespace.
-
-## Deploying BlueMap
-
-BlueMap is deployed as a Kubernetes deployment, service, and ingress. The deployment uses the PostgreSQL instance for storing map data.
-
-The `deploy.yaml` file includes the following resources:
-
-- **PostgreSQL Cluster**: A PostgreSQL instance managed by the CloudNativePG operator.
-- **Deployment**: The BlueMap application container.
-- **Service**: Exposes the BlueMap application on port 8100.
-- **Ingress**: Configures access to BlueMap via an Ingress resource with TLS enabled using Let's Encrypt.
-
-To deploy BlueMap, apply the `deploy.yaml` file:
-
-```bash
-kubectl apply -f deploy.yaml
-```
+This will:
+1. Create a PostgreSQL cluster with external access
+3. Deploy BlueMap with the configured PostgreSQL database
+4. Make BlueMap accessible through a LoadBalancer service
 
 ## Accessing BlueMap
 
@@ -64,9 +54,7 @@ For more information on BlueMap configuration, refer to the [BlueMap documentati
 To retrieve the PostgreSQL credentials stored in Kubernetes secrets, use the following commands:
 
 ```bash
-kubectl get secret bluemap-cluster-app -n minecraft -o jsonpath="{.data.uri}" | base64 --decode
-kubectl get secret bluemap-cluster-app -n minecraft -o jsonpath="{.data.username}" | base64 --decode
-kubectl get secret bluemap-cluster-app -n minecraft -o jsonpath="{.data.password}" | base64 --decode
+kubectl get secret bluemap-cluster-app -n minecraft -o jsonpath="{.data.jdbc-uri}" | base64 --decode
 ```
 
 ## Docker Image
