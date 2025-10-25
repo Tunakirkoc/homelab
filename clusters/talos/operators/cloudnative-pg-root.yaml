@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cloudnative-pg
+  name: cloudnative-pg-root
   namespace: argocd
 spec:
   project: default
@@ -9,7 +9,6 @@ spec:
     repoURL: https://github.com/tunakirkoc/homelab.git
     targetRevision: main
     path: operators/cloudnative-pg
-    targetRevision: 1.27.1
   destination:
     server: https://kubernetes.default.svc
     namespace: cnpg-system
