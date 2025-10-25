@@ -8,7 +8,7 @@ spec:
   source:
     repoURL: https://github.com/tunakirkoc/homelab.git
     targetRevision: main
-    path: clusters/talos/apps-root
+    path: clusters/talos/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
