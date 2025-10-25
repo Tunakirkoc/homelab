@@ -1,24 +1,18 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: cnpg
+  name: operators-root
   namespace: argocd
 spec:
   project: default
-
   source:
-    repoURL: https://cloudnative-pg.github.io/charts
-    chart: cloudnative-pg
-    targetRevision: latest
-    helm:
-      releaseName: cnpg
+    repoURL: https://github.com/tunakirkoc/homelab.git
+    targetRevision: main
+    path: clusters/talos/operators
   destination:
     server: https://kubernetes.default.svc
-    namespace: cnpg-system
-
+    namespace: argocd
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
-    syncOptions:
-      - CreateNamespace=true
