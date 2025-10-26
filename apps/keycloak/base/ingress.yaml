@@ -21,6 +21,6 @@ spec:
                 port:
                   number: 8080
   tls:
-    - secretName: authentik-tls
+    - secretName: keycloak-tls
       hosts:
         - auth.kirkoc.net
