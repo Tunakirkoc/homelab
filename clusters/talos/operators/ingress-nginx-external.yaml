@@ -1,0 +1,30 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ingress-nginx-external
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://kubernetes.github.io/ingress-nginx
+    chart: ingress-nginx
+    targetRevision: 4.13.3
+    helm:
+      releaseName: ingress-nginx-external
+      values: |
+        controller:
+          ingressClassResource:
+            name: nginx-external
+            controllerValue: "k8s.io/ingress-nginx-external"
+            default: false
+          service:
+            loadBalancerIP: "10.10.8.2"
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ingress-external
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
