@@ -1,0 +1,25 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: bluemap
+  labels:
+    app: bluemap
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx-external
+  tls:
+    - secretName: bluemap-tls
+      hosts:
+        - map.kirkoc.net
+  rules:
+    - host: map.kirkoc.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: bluemap
+                port:
+                  number: 8100

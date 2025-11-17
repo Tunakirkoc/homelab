@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bluemap
+  labels:
+    app: bluemap
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bluemap
+  template:
+    metadata:
+      labels:
+        app: bluemap
+    spec:
+      containers:
+        - name: bluemap
+          image: ghcr.io/tunakirkoc/homelab/bluemap:main
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: BLUEMAP_DB_JDBC_URL
+              valueFrom:
+                secretKeyRef:
+                  name: bluemap-db-app
+                  key: jdbc-uri
+          ports:
+            - containerPort: 8100
+              name: web
+          readinessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: web
+            initialDelaySeconds: 30
+            periodSeconds: 30
+          resources:
+            requests:
+              cpu: 500m
+              memory: 3Gi
+            limits:
+              cpu: 2000m
+              memory: 6Gi
