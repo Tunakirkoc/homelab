@@ -10,7 +10,7 @@ ARG PG_JDBC_URL="https://github.com/pgjdbc/pgjdbc/releases/download/REL${PG_JDBC
 RUN curl -fL "${BLUEMAP_CLI_URL}" -o "/app/bluemap-cli.jar" \
     && curl -fL "${PG_JDBC_URL}" -o "/app/postgresql-driver.jar"
 
-COPY .config /app/config
+COPY config /app/config
 
 COPY entrypoint.sh /app/entrypoint.sh
 RUN chmod +x /app/entrypoint.sh
