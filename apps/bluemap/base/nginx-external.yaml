@@ -1,17 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: bluemap
+  name: bluemap-external
   labels:
     app: bluemap
   annotations:
+    kubernetes.io/ingress.class: nginx-external
     cert-manager.io/cluster-issuer: letsencrypt-prod
 spec:
   ingressClassName: nginx-external
-  tls:
-    - secretName: bluemap-tls
-      hosts:
-        - map.kirkoc.net
   rules:
     - host: map.kirkoc.net
       http:
@@ -23,3 +20,7 @@ spec:
                 name: bluemap
                 port:
                   number: 8100
+  tls:
+    - secretName: bluemap-external-tls
+      hosts:
+        - map.kirkoc.net
