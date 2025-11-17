@@ -18,4 +18,4 @@ fi
 # Inject the runtime JDBC url into the config before launching BlueMap
 perl -0pi -e 's/(connection-url:\s*)".*?"/$1 . "\"" . $ENV{BLUEMAP_DB_JDBC_URL} . "\""/e' "${sql_file}"
 
-exec java -jar bluemap-cli.jar -w
+exec java -jar bluemap-cli.jar -w -r
