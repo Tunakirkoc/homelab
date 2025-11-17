@@ -1,0 +1,26 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: bluemap-db
+  labels:
+    app: bluemap
+spec:
+  instances: 1
+  storage:
+    size: 64Gi
+  bootstrap:
+    initdb:
+      database: bluemap
+      owner: bluemap
+  managed:
+    services:
+      disabledDefaultServices: ["ro", "r"]
+      additional:
+        - selectorType: rw
+          serviceTemplate:
+            metadata:
+              name: "bluemap-cluster-external-rw"
+              annotations:
+                metallb.universe.tf/loadBalancerIPs: 10.10.8.8
+            spec:
+              type: LoadBalancer
