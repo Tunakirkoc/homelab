@@ -27,18 +27,6 @@ spec:
           ports:
             - containerPort: 8100
               name: web
-          readinessProbe:
-            httpGet:
-              path: /
-              port: web
-            initialDelaySeconds: 10
-            periodSeconds: 10
-          livenessProbe:
-            httpGet:
-              path: /
-              port: web
-            initialDelaySeconds: 30
-            periodSeconds: 30
           resources:
             requests:
               cpu: 500m
