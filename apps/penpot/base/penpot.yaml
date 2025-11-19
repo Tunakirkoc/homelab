@@ -1,0 +1,53 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: penpot
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: http://helm.penpot.app
+    chart: penpot
+    targetRevision: 0.30.0
+    helm:
+      releaseName: penpot
+      values: |
+        config:
+          publicUri: "https://penpot.kirkoc.net"
+          flags: "enable-registration enable-login-with-oidc disable-email-verification enable-smtp"
+          apiSecretKey: ""
+          existingSecret: "penpot-shared-secret"
+          secretKeys:
+            apiSecretKey: "api-secret-key"
+          postgresql:
+            existingSecret: "penpot-db-app"
+            secretKeys:
+              postgresqlUriKey: "uri"
+          providers:
+            oidc:
+              # -- Whether to enable OIDC configuration. To enable OpenID Connect auth, also add `enable-login-with-oidc` to the flags.
+              # @section -- Configuration parameters
+              enabled: true
+              # -- The OpenID Connect base URI to use.
+              # @section -- Configuration parameters
+              baseURI: "https://auth.kirkoc.net/realms/master/.well-known/openid-configuration"
+            # -- The name of an existing secret to use.
+            # @section -- Configuration parameters
+            existingSecret: "penpot-shared-secret"
+            secretKeys:
+              # -- The OpenID Connect client ID key to use from an existing secret.
+              # @section -- Configuration parameters
+              oidcClientIDKey: "oidc-client-id"
+              # -- The OpenID Connect client secret key to use from an existing secret.
+              # @section -- Configuration parameters
+              oidcClientSecretKey: "oidc-client-secret"
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: penpot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true

@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: penpot
+  namespace: argocd
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/tunakirkoc/homelab.git
+    targetRevision: main
+    path: apps/penpot/overlays/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: penpot
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
