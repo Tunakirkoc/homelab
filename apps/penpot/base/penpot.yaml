@@ -25,22 +25,25 @@ spec:
               postgresqlUriKey: "uri"
           providers:
             oidc:
-              # -- Whether to enable OIDC configuration. To enable OpenID Connect auth, also add `enable-login-with-oidc` to the flags.
-              # @section -- Configuration parameters
               enabled: true
-              # -- The OpenID Connect base URI to use.
-              # @section -- Configuration parameters
               baseURI: "https://auth.kirkoc.net/realms/master/.well-known/openid-configuration"
-            # -- The name of an existing secret to use.
-            # @section -- Configuration parameters
             existingSecret: "penpot-shared-secret"
             secretKeys:
-              # -- The OpenID Connect client ID key to use from an existing secret.
-              # @section -- Configuration parameters
               oidcClientIDKey: "oidc-client-id"
-              # -- The OpenID Connect client secret key to use from an existing secret.
-              # @section -- Configuration parameters
               oidcClientSecretKey: "oidc-client-secret"
+        ingress:
+          enabled: true
+          className: "nginx-external"
+          annotations: {
+            cert-manager.io/cluster-issuer: "letsencrypt-prod"
+          }
+          path: "/"
+          hosts:
+            - "penpot.kirkoc.net"
+          tls:
+            - secretName: penpot-tls
+              hosts:
+                - penpot.kirkoc.net
 
   destination:
     server: https://kubernetes.default.svc
