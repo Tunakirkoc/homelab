@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: cloud
+  labels:
+    app: cloud
+  annotations:
+    kubernetes.io/ingress.class: nginx-internal
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+spec:
+  ingressClassName: nginx-internal
+  rules:
+    - host: cloud.kirkoc.net
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: cloud
+                port:
+                  number: 80
+  tls:
+    - secretName: cloud-tls
+      hosts:
+        - cloud.kirkoc.net
