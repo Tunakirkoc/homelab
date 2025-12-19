@@ -19,7 +19,7 @@ spec:
               service:
                 name: cloud
                 port:
-                  number: 80
+                  number: 11000
   tls:
     - secretName: cloud-tls
       hosts:
